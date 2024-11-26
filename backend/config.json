@@ -1,0 +1,19 @@
+{
+  "app_name": "ContactingAI",
+  "environment": "development",
+  "database": {
+    "adapter": "postgres",
+    "database": "contacting_ai_dev",
+    "username": "postgres",
+    "password": "password",
+    "hostname": "localhost"
+  },
+  "server": {
+    "port": 4000
+  },
+  "secret_key_base": "placeholder_secret_key_base",
+  "ai_integration": {
+    "api_key": "your_ai_api_key_here",
+    "endpoint": "https://api.example.com/ai"
+  }
+}

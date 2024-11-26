@@ -1,0 +1,25 @@
+{
+  "name": "contacting-ai-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "start": "sirv public --no-clear --single"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^17.0.0",
+    "@rollup/plugin-node-resolve": "^11.0.0",
+    "@rollup/plugin-terser": "^0.4.4",
+    "rollup": "^2.3.4",
+    "rollup-plugin-css-only": "^3.1.0",
+    "rollup-plugin-livereload": "^2.0.0",
+    "rollup-plugin-svelte": "^7.0.0",
+    "rollup-plugin-terser": "^7.0.0",
+    "svelte": "^3.59.2"
+  },
+  "dependencies": {
+    "sirv-cli": "^1.0.0",
+    "svelte-routing": "^2.13.0"
+  }
+}
