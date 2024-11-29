@@ -3,11 +3,11 @@
   import ContactChatbot from './ContactChatbot.svelte';
 
   let contacts = [
-    { id: 1, name: 'Alice Johnson', company: 'TechCorp', email: 'alice@techcorp.com', phone: '123-456-7890', value: 5000 },
-    { id: 2, name: 'Bob Smith', company: 'DesignHub', email: 'bob@designhub.com', phone: '234-567-8901', value: 10000 },
-    { id: 3, name: 'Carol Williams', company: 'MarketPro', email: 'carol@marketpro.com', phone: '345-678-9012', value: 15000 },
-    { id: 4, name: 'David Brown', company: 'InfoSoft', email: 'david@infosoft.com', phone: '456-789-0123', value: 20000 },
-    { id: 5, name: 'Eva Davis', company: 'GrowthCo', email: 'eva@growthco.com', phone: '567-890-1234', value: 25000 }
+    { id: 1, name: 'Alice Johnson', company: 'TechCorp', phone: '123-456-7890', value: 5000 },
+    { id: 2, name: 'Bob Smith', company: 'DesignHub', phone: '234-567-8901', value: 10000 },
+    { id: 3, name: 'Carol Williams', company: 'MarketPro', phone: '345-678-9012', value: 15000 },
+    { id: 4, name: 'David Brown', company: 'InfoSoft', phone: '456-789-0123', value: 20000 },
+    { id: 5, name: 'Eva Davis', company: 'GrowthCo', phone: '567-890-1234', value: 25000 }
   ];
 
   let selectedContact = null;
@@ -120,7 +120,6 @@
       <div class="contact-card" on:click={() => selectContact(contact)}>
         <h3>{contact.name}</h3>
         <p>{contact.company}</p>
-        <p>{contact.email}</p>
         <p>{contact.phone}</p>
         <p>${contact.value.toLocaleString()}</p>
       </div>
@@ -132,7 +131,6 @@
     <div class="popup">
       <h2>{selectedContact.name}</h2>
       <p><strong>Company:</strong> {selectedContact.company}</p>
-      <p><strong>Email:</strong> {selectedContact.email}</p>  
       <p><strong>Phone:</strong> {selectedContact.phone}</p>
       <p><strong>Deal Value:</strong> ${selectedContact.value.toLocaleString()}</p>
       

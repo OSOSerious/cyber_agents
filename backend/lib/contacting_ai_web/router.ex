@@ -20,6 +20,5 @@ defmodule ContactingAIWeb.Router do
 
     # Contact routes
     resources "/contacts", ContactController, except: [:new, :edit]
-    post "/contacts/send_email", ContactController, :send_email
   end
 end
