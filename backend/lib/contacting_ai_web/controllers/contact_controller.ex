@@ -40,25 +40,4 @@ defmodule ContactingAIWeb.ContactController do
       send_resp(conn, :no_content, "")
     end
   end
-
-  def send_email(conn, %{"name" => name, "email" => email, "message" => message}) do
-    case send_email_python(name, email, message) do
-      :ok -> 
-        conn
-        |> put_status(:ok)
-        |> json(%{message: "Email sent successfully"})
-      _ -> 
-        conn
-        |> put_status(:internal_server_error)
-        |> json(%{error: "Error sending email"})
-    end
-  end
-
-  defp send_email_python(name, email, message) do
-    # Call Python script to send email
-    case System.cmd("python3", ["#{File.cwd!()}/lib/contacting_ai_web/python/send_email.py", name, email, message]) do
-      {_, 0} -> :ok
-      _ -> :error
-    end
-  end
 end
