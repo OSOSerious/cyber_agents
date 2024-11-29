@@ -10,7 +10,10 @@
     totalContacts: 0,
     totalInteractions: 0,
     conversionRate: 0,
-    recentActivity: []
+    recentActivity: [],
+    csat: 0,
+    nps: 0,
+    clv: 0
   };
   let loading = true;
   let error = null;
@@ -80,7 +83,10 @@
     const data = [
       { label: 'Contacts', value: analyticsData.totalContacts },
       { label: 'Interactions', value: analyticsData.totalInteractions },
-      { label: 'Conversions', value: analyticsData.conversionRate }
+      { label: 'Conversions', value: analyticsData.conversionRate },
+      { label: 'CSAT', value: analyticsData.csat },
+      { label: 'NPS', value: analyticsData.nps },
+      { label: 'CLV', value: analyticsData.clv }
     ];
 
     const width = 450;
@@ -137,6 +143,18 @@
       <div class="metric-card">
         <h3>Conversion Rate</h3>
         <p>{analyticsData.conversionRate}%</p>
+      </div>
+      <div class="metric-card">
+        <h3>CSAT</h3>
+        <p>{analyticsData.csat}</p>
+      </div>
+      <div class="metric-card">
+        <h3>NPS</h3>
+        <p>{analyticsData.nps}</p>
+      </div>
+      <div class="metric-card">
+        <h3>CLV</h3>
+        <p>{analyticsData.clv}</p>
       </div>
     </div>
     <div class="charts">

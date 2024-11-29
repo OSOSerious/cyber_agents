@@ -12,7 +12,8 @@
     timezone: 'UTC-5',
     linkedin: 'https://linkedin.com/in/johndoe',
     twitter: '@johndoe',
-    profilePicture: 'https://example.com/profile.jpg'
+    profilePicture: 'https://example.com/profile.jpg',
+    language: 'English'
   };
 
   let passwordChange = {
@@ -81,6 +82,15 @@
           <option value="UTC-11">UTC-11</option>
           <!-- Add more timezone options -->
           <option value="UTC+12">UTC+12</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="language">Language</label>
+        <select id="language" bind:value={user.language}>
+          <option value="English">English</option>
+          <option value="Spanish">Spanish</option>
+          <option value="French">French</option>
+          <option value="German">German</option>
         </select>
       </div>
       <div class="form-group">

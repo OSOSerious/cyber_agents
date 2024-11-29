@@ -2,6 +2,8 @@
   import { onMount } from 'svelte';
   import { fade } from 'svelte/transition';
   import { user } from '../stores/auth';
+  import Shepherd from 'shepherd.js';
+  import 'shepherd.js/dist/css/shepherd.css';
   
   let campaigns = [];
   let selectedTags = [];
@@ -41,6 +43,63 @@
       totalImpressions: 15000
     };
     loading = false;
+
+    // Initialize Shepherd tour
+    const tour = new Shepherd.Tour({
+      defaultStepOptions: {
+        classes: 'shepherd-theme-arrows',
+        scrollTo: true
+      }
+    });
+
+    tour.addStep({
+      id: 'welcome',
+      text: 'Welcome to your dashboard! Let us guide you through the key features.',
+      buttons: [
+        {
+          text: 'Next',
+          action: tour.next
+        }
+      ]
+    });
+
+    tour.addStep({
+      id: 'stats',
+      text: 'Here you can see an overview of your campaign statistics.',
+      attachTo: { element: '.stats-grid', on: 'bottom' },
+      buttons: [
+        {
+          text: 'Next',
+          action: tour.next
+        }
+      ]
+    });
+
+    tour.addStep({
+      id: 'filters',
+      text: 'Use these filters to narrow down your campaign search.',
+      attachTo: { element: '.filters-section', on: 'right' },
+      buttons: [
+        {
+          text: 'Next',
+          action: tour.next
+        }
+      ]
+    });
+
+    tour.addStep({
+      id: 'campaigns',
+      text: 'Here you can see a list of your campaigns.',
+      attachTo: { element: '.campaigns-section', on: 'top' },
+      buttons: [
+        {
+          text: 'Finish',
+          action: tour.complete
+        }
+      ]
+    });
+
+    tour.start();
   });
 
   function filterCampaigns() {

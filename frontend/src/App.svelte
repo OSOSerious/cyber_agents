@@ -12,8 +12,58 @@
   import Dashboard from "./pages/Dashboard.svelte";
   import Conversations from './pages/Conversations.svelte';
   import NotFound from './pages/NotFound.svelte';
+  import Shepherd from 'shepherd.js';
+  import 'shepherd.js/dist/css/shepherd.css';
 
   export let url = "";
+
+  let tour;
+
+  function startTour() {
+    tour = new Shepherd.Tour({
+      defaultStepOptions: {
+        classes: 'shepherd-theme-arrows',
+        scrollTo: true
+      }
+    });
+
+    tour.addStep({
+      id: 'welcome',
+      text: 'Welcome to ContactingAI! Let us guide you through the key features.',
+      buttons: [
+        {
+          text: 'Next',
+          action: tour.next
+        }
+      ]
+    });
+
+    tour.addStep({
+      id: 'dashboard',
+      text: 'This is your dashboard where you can see an overview of your campaigns.',
+      attachTo: { element: '.dashboard-container', on: 'bottom' },
+      buttons: [
+        {
+          text: 'Next',
+          action: tour.next
+        }
+      ]
+    });
+
+    tour.addStep({
+      id: 'conversations',
+      text: 'Here you can manage your conversations with customers.',
+      attachTo: { element: '.conversations-container', on: 'bottom' },
+      buttons: [
+        {
+          text: 'Finish',
+          action: tour.complete
+        }
+      ]
+    });
+
+    tour.start();
+  }
 </script>
 
 <Router {url}>
