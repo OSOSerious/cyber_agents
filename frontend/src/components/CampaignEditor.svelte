@@ -12,7 +12,16 @@
     content: '',
     targetAudience: '',
     schedule: 'immediate',
-    scheduledDate: ''
+    scheduledDate: '',
+    abTest: false,
+    versionA: {
+      subject: '',
+      content: ''
+    },
+    versionB: {
+      subject: '',
+      content: ''
+    }
   };
 
   const categories = ['B2B', 'B2C', 'Enterprise', 'Startup', 'E-commerce'];
@@ -139,6 +148,49 @@
             id="scheduledDate"
             bind:value={campaign.scheduledDate}
           />
+        </div>
+      {/if}
+
+      <div class="form-group full-width">
+        <label for="abTest">A/B Testing</label>
+        <input
+          type="checkbox"
+          id="abTest"
+          bind:checked={campaign.abTest}
+        />
+      </div>
+
+      {#if campaign.abTest}
+        <div class="form-group full-width">
+          <label for="versionA">Version A</label>
+          <input
+            type="text"
+            id="versionA"
+            bind:value={campaign.versionA.subject}
+            placeholder="Enter subject for version A"
+          />
+          <textarea
+            id="versionAContent"
+            bind:value={campaign.versionA.content}
+            placeholder="Enter content for version A"
+            rows="6"
+          ></textarea>
+        </div>
+
+        <div class="form-group full-width">
+          <label for="versionB">Version B</label>
+          <input
+            type="text"
+            id="versionB"
+            bind:value={campaign.versionB.subject}
+            placeholder="Enter subject for version B"
+          />
+          <textarea
+            id="versionBContent"
+            bind:value={campaign.versionB.content}
+            placeholder="Enter content for version B"
+            rows="6"
+          ></textarea>
         </div>
       {/if}
     </div>
