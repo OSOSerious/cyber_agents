@@ -5,7 +5,7 @@
     "adapter": "postgres",
     "database": "contacting_ai_dev",
     "username": "postgres",
-    "password": "password",
+    "password": "postgres",
     "hostname": "localhost"
   },
   "server": {
@@ -15,5 +15,9 @@
   "ai_integration": {
     "api_key": "your_ai_api_key_here",
     "endpoint": "https://api.example.com/ai"
+  },
+  "email": {
+    "sender": "nicholasdelnegro80@gmail.com",
+    "password": "postgres"
   }
 }

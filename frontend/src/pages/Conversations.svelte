@@ -1,596 +1,510 @@
 <script>
-  import { fade } from 'svelte/transition';
+  import { onMount } from 'svelte';
+  import { api } from '../services/api';
   import DashboardLayout from '../components/DashboardLayout.svelte';
 
-  // Sample data - replace with actual API calls
-  let conversations = [
-    {
-      id: 1,
-      customer: {
-        name: 'John Smith',
-        email: 'john.smith@example.com',
-        avatar: '/default-avatar.png'
-      },
-      lastMessage: 'I need help with setting up my account',
-      time: '5 min ago',
-      status: 'active',
-      unread: 2
-    },
-    {
-      id: 2,
-      customer: {
-        name: 'Sarah Johnson',
-        email: 'sarah.j@example.com',
-        avatar: '/default-avatar.png'
-      },
-      lastMessage: 'Thanks for your help with the technical issue',
-      time: '15 min ago',
-      status: 'completed',
-      unread: 0
-    },
-    {
-      id: 3,
-      customer: {
-        name: 'Mike Wilson',
-        email: 'mike.w@example.com',
-        avatar: '/default-avatar.png'
-      },
-      lastMessage: 'Can you explain the pricing plans?',
-      time: '1 hour ago',
-      status: 'pending',
-      unread: 1
+  let interactions = [];
+  let loading = true;
+  let error = null;
+  let page = 1;
+  let perPage = 10;
+  let selectedInteraction = null;
+  let aiSuggestion = null;
+
+  async function loadInteractions() {
+    try {
+      const data = await api.getInteractions(page, perPage);
+      interactions = data;
+    } catch (e) {
+      error = e.message;
+    } finally {
+      loading = false;
     }
-  ];
-
-  let selectedConversation = null;
-  let newMessage = '';
-
-  function handleSendMessage() {
-    if (!newMessage.trim()) return;
-    
-    // Add message to conversation
-    // This is a placeholder - replace with actual API call
-    const message = {
-      id: Date.now(),
-      content: newMessage,
-      sender: 'agent',
-      time: new Date().toISOString()
-    };
-    
-    // Reset input
-    newMessage = '';
   }
 
-  let filterStatus = 'all';
-  let searchQuery = '';
+  async function getAISuggestion(interaction) {
+    try {
+      const suggestion = await api.getAISuggestion(interaction.id);
+      aiSuggestion = suggestion;
+    } catch (e) {
+      console.error('Error getting AI suggestion:', e);
+    }
+  }
 
-  $: filteredConversations = conversations.filter(conv => {
-    const matchesStatus = filterStatus === 'all' || conv.status === filterStatus;
-    const matchesSearch = !searchQuery || 
-      conv.customer.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      conv.customer.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      conv.lastMessage.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesStatus && matchesSearch;
-  });
+  async function assignToAgent(interaction) {
+    try {
+      await api.assignToAgent(interaction.id);
+      await loadInteractions();
+    } catch (e) {
+      error = e.message;
+    }
+  }
+
+  function handleInteractionSelect(interaction) {
+    selectedInteraction = interaction;
+    getAISuggestion(interaction);
+  }
+
+  onMount(loadInteractions);
 </script>
 
 <DashboardLayout>
-  <div class="conversations-page" in:fade>
-    <header class="page-header">
-      <div class="header-content">
-        <h1>Conversations</h1>
-        <button class="new-conversation-btn">
-          <span>+</span>
-          New Conversation
-        </button>
-      </div>
-
-      <div class="filters">
-        <div class="search-box">
-          <span class="search-icon">🔍</span>
-          <input
-            type="text"
-            bind:value={searchQuery}
-            placeholder="Search conversations..."
-          />
-        </div>
-
-        <div class="status-filters">
-          <button
-            class="filter-btn"
-            class:active={filterStatus === 'all'}
-            on:click={() => filterStatus = 'all'}
-          >
-            All
-          </button>
-          <button
-            class="filter-btn"
-            class:active={filterStatus === 'active'}
-            on:click={() => filterStatus = 'active'}
-          >
-            Active
-          </button>
-          <button
-            class="filter-btn"
-            class:active={filterStatus === 'pending'}
-            on:click={() => filterStatus = 'pending'}
-          >
-            Pending
-          </button>
-          <button
-            class="filter-btn"
-            class:active={filterStatus === 'completed'}
-            on:click={() => filterStatus = 'completed'}
-          >
-            Completed
-          </button>
-        </div>
+  <div class="conversations">
+    <header>
+      <h1>Active Interactions</h1>
+      <div class="header-actions">
+        <button class="filter-btn active">All Channels</button>
+        <button class="filter-btn">Web Chat</button>
+        <button class="filter-btn">Voice</button>
+        <button class="filter-btn">Video</button>
       </div>
     </header>
 
-    <div class="conversations-container">
-      <div class="conversations-list">
-        {#each filteredConversations as conversation (conversation.id)}
-          <div
-            class="conversation-card"
-            class:active={selectedConversation?.id === conversation.id}
-            on:click={() => selectedConversation = conversation}
-          >
-            <img
-              src={conversation.customer.avatar}
-              alt={conversation.customer.name}
-              class="customer-avatar"
-            />
-            <div class="conversation-info">
-              <div class="conversation-header">
-                <h3 class="customer-name">{conversation.customer.name}</h3>
-                <span class="conversation-time">{conversation.time}</span>
+    {#if loading}
+      <div class="loading">Loading interactions...</div>
+    {:else if error}
+      <div class="error">{error}</div>
+    {:else}
+      <div class="interactions-container">
+        <!-- Interactions List -->
+        <div class="interactions-list">
+          {#each interactions as interaction}
+            <div 
+              class="interaction-card"
+              class:selected={selectedInteraction?.id === interaction.id}
+              on:click={() => handleInteractionSelect(interaction)}
+            >
+              <div class="interaction-header">
+                <div class="channel-badge {interaction.channel}">
+                  {#if interaction.channel === 'web_chat'}
+                    💬
+                  {:else if interaction.channel === 'voice'}
+                    📞
+                  {:else if interaction.channel === 'video'}
+                    🤳
+                  {:else if interaction.channel === 'messaging'}
+                    📱
+                  {/if}
+                  {interaction.channel.replace('_', ' ')}
+                </div>
+                <span class="timestamp">{new Date(interaction.inserted_at).toLocaleString()}</span>
               </div>
-              <div class="conversation-preview">
-                <p class="last-message">{conversation.lastMessage}</p>
-                {#if conversation.unread}
-                  <span class="unread-badge">{conversation.unread}</span>
+              
+              <div class="interaction-content">
+                <p class="message">{interaction.message}</p>
+                <div class="ai-tags">
+                  {#if interaction.intent}
+                    <span class="tag intent">Intent: {interaction.intent}</span>
+                  {/if}
+                  {#if interaction.sentiment}
+                    <span class="tag sentiment">Sentiment: {interaction.sentiment}</span>
+                  {/if}
+                </div>
+              </div>
+
+              <div class="interaction-footer">
+                <span class="status {interaction.status}">{interaction.status}</span>
+                {#if interaction.ai_confidence}
+                  <span class="ai-confidence">
+                    AI Confidence: {interaction.ai_confidence}%
+                  </span>
                 {/if}
               </div>
-              <span
-                class="status-badge"
-                class:active={conversation.status === 'active'}
-                class:completed={conversation.status === 'completed'}
-                class:pending={conversation.status === 'pending'}
-              >
-                {conversation.status}
-              </span>
             </div>
-          </div>
-        {/each}
-      </div>
+          {/each}
+        </div>
 
-      <div class="conversation-detail">
-        {#if selectedConversation}
-          <div class="detail-header">
-            <div class="customer-info">
-              <img
-                src={selectedConversation.customer.avatar}
-                alt={selectedConversation.customer.name}
-                class="customer-avatar"
-              />
-              <div>
-                <h2>{selectedConversation.customer.name}</h2>
-                <p class="customer-email">{selectedConversation.customer.email}</p>
+        <!-- Interaction Details -->
+        <div class="interaction-details">
+          {#if selectedInteraction}
+            <div class="details-content">
+              <div class="details-header">
+                <h2>Interaction Details</h2>
+                <div class="action-buttons">
+                  <button class="action-btn voice">
+                    📞 Voice Call
+                  </button>
+                  <button class="action-btn video">
+                    🤳 Video Chat
+                  </button>
+                </div>
+              </div>
+
+              <div class="details-section">
+                <h3>AI Analysis</h3>
+                {#if aiSuggestion}
+                  <div class="ai-suggestion">
+                    <div class="suggestion-header">
+                      <span class="label">Recommended Action:</span>
+                      <span class="value">{aiSuggestion.recommendation}</span>
+                    </div>
+                    <div class="suggestion-details">
+                      <div class="detail-item">
+                        <span class="label">Priority:</span>
+                        <span class="value priority-{aiSuggestion.priority}">{aiSuggestion.priority}</span>
+                      </div>
+                      <div class="detail-item">
+                        <span class="label">Required Expertise:</span>
+                        <span class="value">{aiSuggestion.required_expertise}</span>
+                      </div>
+                      <div class="detail-item">
+                        <span class="label">Suggested Channel:</span>
+                        <span class="value">{aiSuggestion.suggested_channel}</span>
+                      </div>
+                    </div>
+                  </div>
+                {/if}
+              </div>
+
+              <div class="details-section">
+                <h3>Action Required</h3>
+                <div class="action-options">
+                  <button class="option-btn ai" on:click={() => assignToAgent(selectedInteraction, 'ai')}>
+                    🤖 Let AI Handle
+                  </button>
+                  <button class="option-btn human" on:click={() => assignToAgent(selectedInteraction, 'human')}>
+                    👤 Assign to Human Agent
+                  </button>
+                </div>
               </div>
             </div>
-            <div class="detail-actions">
-              <button class="action-btn">
-                <span>📞</span>
-                Call
-              </button>
-              <button class="action-btn">
-                <span>📧</span>
-                Email
-              </button>
-              <button class="action-btn">
-                <span>⚙️</span>
-              </button>
+          {:else}
+            <div class="no-selection">
+              <div class="placeholder-content">
+                <span class="placeholder-icon">👋</span>
+                <h3>Select an Interaction</h3>
+                <p>Choose an interaction from the list to view details and take action</p>
+              </div>
             </div>
-          </div>
-
-          <div class="messages-container">
-            <!-- Messages will be displayed here -->
-            <div class="message-placeholder">
-              Messages will appear here
-            </div>
-          </div>
-
-          <div class="message-input">
-            <input
-              type="text"
-              bind:value={newMessage}
-              placeholder="Type your message..."
-              on:keydown={e => e.key === 'Enter' && handleSendMessage()}
-            />
-            <button
-              class="send-btn"
-              on:click={handleSendMessage}
-              disabled={!newMessage.trim()}
-            >
-              Send
-            </button>
-          </div>
-        {:else}
-          <div class="no-conversation">
-            <div class="placeholder-content">
-              <span class="placeholder-icon">💬</span>
-              <h2>Select a Conversation</h2>
-              <p>Choose a conversation from the list to view messages</p>
-            </div>
-          </div>
-        {/if}
+          {/if}
+        </div>
       </div>
-    </div>
+    {/if}
   </div>
 </DashboardLayout>
 
 <style>
-  .conversations-page {
-    padding: 2rem;
+  .conversations {
+    padding: 2em;
     height: 100%;
+  }
+
+  header {
+    margin-bottom: 2em;
+  }
+
+  h1 {
+    margin: 0 0 1em;
+    color: #2d3748;
+  }
+
+  .header-actions {
     display: flex;
-    flex-direction: column;
-  }
-
-  .page-header {
-    margin-bottom: 2rem;
-  }
-
-  .header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-  }
-
-  .header-content h1 {
-    font-size: 2rem;
-    color: #1a1a1a;
-  }
-
-  .new-conversation-btn {
-    background: #4a90e2;
-    color: white;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.5rem;
-    font-weight: 500;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    transition: background-color 0.2s;
-  }
-
-  .new-conversation-btn:hover {
-    background: #357abd;
-  }
-
-  .filters {
-    display: flex;
-    gap: 1.5rem;
-    align-items: center;
-  }
-
-  .search-box {
-    flex: 1;
-    max-width: 400px;
-    position: relative;
-  }
-
-  .search-icon {
-    position: absolute;
-    left: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #666;
-  }
-
-  .search-box input {
-    width: 100%;
-    padding: 0.75rem 1rem 0.75rem 2.5rem;
-    border: 1px solid #eee;
-    border-radius: 0.5rem;
-    font-size: 0.9rem;
-  }
-
-  .status-filters {
-    display: flex;
-    gap: 0.5rem;
+    gap: 1em;
   }
 
   .filter-btn {
     background: none;
-    border: 1px solid #eee;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    color: #666;
+    border: 2px solid #e2e8f0;
+    padding: 0.5em 1em;
+    border-radius: 20px;
+    color: #4a5568;
     cursor: pointer;
     transition: all 0.2s;
   }
 
   .filter-btn:hover {
-    background: #f5f7fa;
+    background: #f7fafc;
   }
 
   .filter-btn.active {
-    background: #4a90e2;
+    background: #4f46e5;
+    border-color: #4f46e5;
     color: white;
-    border-color: #4a90e2;
   }
 
-  .conversations-container {
+  .interactions-container {
     display: grid;
-    grid-template-columns: 350px 1fr;
-    gap: 2rem;
+    grid-template-columns: 400px 1fr;
+    gap: 2em;
     height: calc(100vh - 200px);
-    background: white;
-    border-radius: 1rem;
-    overflow: hidden;
   }
 
-  .conversations-list {
-    border-right: 1px solid #eee;
+  .interactions-list {
     overflow-y: auto;
+    padding-right: 1em;
   }
 
-  .conversation-card {
-    display: flex;
-    gap: 1rem;
-    padding: 1rem;
+  .interaction-card {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5em;
+    margin-bottom: 1em;
     cursor: pointer;
-    transition: background-color 0.2s;
-    border-bottom: 1px solid #eee;
+    transition: all 0.2s;
+    border: 2px solid transparent;
   }
 
-  .conversation-card:hover {
-    background: #f5f7fa;
+  .interaction-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   }
 
-  .conversation-card.active {
-    background: #f0f7ff;
+  .interaction-card.selected {
+    border-color: #4f46e5;
   }
 
-  .customer-avatar {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    object-fit: cover;
-  }
-
-  .conversation-info {
-    flex: 1;
-  }
-
-  .conversation-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 0.25rem;
-  }
-
-  .customer-name {
-    font-weight: 500;
-    color: #1a1a1a;
-  }
-
-  .conversation-time {
-    font-size: 0.8rem;
-    color: #666;
-  }
-
-  .conversation-preview {
+  .interaction-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 0.5rem;
+    margin-bottom: 1em;
   }
 
-  .last-message {
-    color: #666;
-    font-size: 0.9rem;
-    margin: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 200px;
-  }
-
-  .unread-badge {
-    background: #4a90e2;
-    color: white;
-    font-size: 0.75rem;
-    padding: 0.25rem 0.5rem;
-    border-radius: 1rem;
-  }
-
-  .status-badge {
-    padding: 0.25rem 0.5rem;
-    border-radius: 1rem;
-    font-size: 0.75rem;
-    font-weight: 500;
+  .channel-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.5em 1em;
+    border-radius: 20px;
+    font-size: 0.9em;
+    background: #f7fafc;
+    color: #4a5568;
     text-transform: capitalize;
   }
 
-  .status-badge.active {
-    background: #dcfce7;
-    color: #059669;
+  .timestamp {
+    color: #718096;
+    font-size: 0.9em;
   }
 
-  .status-badge.completed {
-    background: #e0e7ff;
-    color: #4f46e5;
+  .interaction-content {
+    margin-bottom: 1em;
   }
 
-  .status-badge.pending {
+  .message {
+    color: #2d3748;
+    margin: 0 0 1em;
+    line-height: 1.5;
+  }
+
+  .ai-tags {
+    display: flex;
+    gap: 0.5em;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    padding: 0.3em 0.8em;
+    border-radius: 15px;
+    font-size: 0.8em;
+  }
+
+  .tag.intent {
+    background: #ebf4ff;
+    color: #3182ce;
+  }
+
+  .tag.sentiment {
+    background: #faf5ff;
+    color: #805ad5;
+  }
+
+  .interaction-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .status {
+    padding: 0.3em 0.8em;
+    border-radius: 15px;
+    font-size: 0.8em;
+    text-transform: capitalize;
+  }
+
+  .status.pending {
     background: #fef3c7;
     color: #d97706;
   }
 
-  .conversation-detail {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+  .status.active {
+    background: #dcfce7;
+    color: #059669;
   }
 
-  .detail-header {
-    padding: 1rem;
-    border-bottom: 1px solid #eee;
+  .status.completed {
+    background: #e0e7ff;
+    color: #4f46e5;
+  }
+
+  .ai-confidence {
+    color: #718096;
+    font-size: 0.9em;
+  }
+
+  .interaction-details {
+    background: white;
+    border-radius: 15px;
+    padding: 2em;
+    overflow-y: auto;
+  }
+
+  .details-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2em;
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 1em;
+  }
+
+  .action-btn {
+    padding: 0.8em 1.5em;
+    border-radius: 25px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s;
+    font-weight: 500;
+  }
+
+  .action-btn.voice {
+    background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
+  }
+
+  .action-btn.video {
+    background: linear-gradient(135deg, #805ad5 0%, #553c9a 100%);
+  }
+
+  .action-btn:hover {
+    transform: translateY(-2px);
+  }
+
+  .details-section {
+    background: #f7fafc;
+    border-radius: 15px;
+    padding: 1.5em;
+    margin-bottom: 1.5em;
+  }
+
+  .details-section h3 {
+    margin: 0 0 1em;
+    color: #2d3748;
+  }
+
+  .ai-suggestion {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5em;
+  }
+
+  .suggestion-header {
+    margin-bottom: 1em;
+    padding-bottom: 1em;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .suggestion-details {
+    display: grid;
+    gap: 1em;
+  }
+
+  .detail-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
 
-  .customer-info {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
+  .label {
+    color: #718096;
   }
 
-  .customer-info h2 {
-    margin: 0;
-    font-size: 1.25rem;
+  .value {
+    font-weight: 500;
+    color: #2d3748;
   }
 
-  .customer-email {
-    margin: 0;
-    color: #666;
-    font-size: 0.9rem;
+  .value.priority-high {
+    color: #e53e3e;
   }
 
-  .detail-actions {
-    display: flex;
-    gap: 0.5rem;
+  .value.priority-medium {
+    color: #d97706;
   }
 
-  .action-btn {
-    background: none;
-    border: 1px solid #eee;
-    padding: 0.5rem;
-    border-radius: 0.5rem;
-    color: #666;
+  .value.priority-low {
+    color: #059669;
+  }
+
+  .action-options {
+    display: grid;
+    gap: 1em;
+  }
+
+  .option-btn {
+    padding: 1em;
+    border-radius: 10px;
+    border: none;
+    color: white;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: transform 0.2s;
+    font-weight: 500;
+    text-align: center;
   }
 
-  .action-btn:hover {
-    background: #f5f7fa;
+  .option-btn.ai {
+    background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
   }
 
-  .messages-container {
-    flex: 1;
-    padding: 1rem;
-    overflow-y: auto;
+  .option-btn.human {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
   }
 
-  .message-placeholder {
+  .option-btn:hover {
+    transform: translateY(-2px);
+  }
+
+  .no-selection {
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #666;
-  }
-
-  .message-input {
-    padding: 1rem;
-    border-top: 1px solid #eee;
-    display: flex;
-    gap: 1rem;
-  }
-
-  .message-input input {
-    flex: 1;
-    padding: 0.75rem 1rem;
-    border: 1px solid #eee;
-    border-radius: 0.5rem;
-    font-size: 0.9rem;
-  }
-
-  .send-btn {
-    background: #4a90e2;
-    color: white;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.5rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-
-  .send-btn:hover {
-    background: #357abd;
-  }
-
-  .send-btn:disabled {
-    background: #ccc;
-    cursor: not-allowed;
-  }
-
-  .no-conversation {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .placeholder-content {
+    color: #718096;
     text-align: center;
-    color: #666;
   }
 
   .placeholder-icon {
-    font-size: 3rem;
-    margin-bottom: 1rem;
+    font-size: 3em;
+    margin-bottom: 0.5em;
     display: block;
   }
 
-  .placeholder-content h2 {
-    margin: 0 0 0.5rem;
-    color: #1a1a1a;
-  }
-
-  .placeholder-content p {
-    margin: 0;
-  }
-
   @media (max-width: 1024px) {
-    .conversations-container {
+    .interactions-container {
       grid-template-columns: 1fr;
     }
 
-    .conversation-detail {
+    .interaction-details {
       display: none;
-    }
-
-    .conversations-list {
-      border-right: none;
     }
   }
 
   @media (max-width: 768px) {
-    .conversations-page {
-      padding: 1rem;
+    .conversations {
+      padding: 1em;
     }
 
-    .header-content {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 1rem;
+    .header-actions {
+      overflow-x: auto;
+      padding-bottom: 1em;
     }
 
-    .filters {
-      flex-direction: column;
-      align-items: stretch;
-    }
-
-    .search-box {
-      max-width: none;
+    .interaction-card {
+      padding: 1em;
     }
   }
 </style>

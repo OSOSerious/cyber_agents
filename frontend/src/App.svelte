@@ -1,9 +1,6 @@
 <script>
-  import { Router, Link, Route, navigate } from "svelte-routing";
-  import { fade } from "svelte/transition";
-  import { isAuthenticated, requireAuth, requireNoAuth } from "./stores/auth";
-  import Layout from "./components/Layout.svelte";
-  import Hero from "./components/Hero.svelte";
+  import { Router, Link, Route } from "svelte-routing";
+  import Home from "./pages/Home.svelte";
   import Features from "./pages/Features.svelte";
   import Benefits from "./pages/Benefits.svelte";
   import Pricing from "./pages/Pricing.svelte";
@@ -12,157 +9,111 @@
   import Dashboard from "./pages/Dashboard.svelte";
   import Conversations from './pages/Conversations.svelte';
   import NotFound from './pages/NotFound.svelte';
-  import Shepherd from 'shepherd.js';
-  import 'shepherd.js/dist/css/shepherd.css';
 
   export let url = "";
-
-  let tour;
-
-  function startTour() {
-    tour = new Shepherd.Tour({
-      defaultStepOptions: {
-        classes: 'shepherd-theme-arrows',
-        scrollTo: true
-      }
-    });
-
-    tour.addStep({
-      id: 'welcome',
-      text: 'Welcome to ContactingAI! Let us guide you through the key features.',
-      buttons: [
-        {
-          text: 'Next',
-          action: tour.next
-        }
-      ]
-    });
-
-    tour.addStep({
-      id: 'dashboard',
-      text: 'This is your dashboard where you can see an overview of your campaigns.',
-      attachTo: { element: '.dashboard-container', on: 'bottom' },
-      buttons: [
-        {
-          text: 'Next',
-          action: tour.next
-        }
-      ]
-    });
-
-    tour.addStep({
-      id: 'conversations',
-      text: 'Here you can manage your conversations with customers.',
-      attachTo: { element: '.conversations-container', on: 'bottom' },
-      buttons: [
-        {
-          text: 'Finish',
-          action: tour.complete
-        }
-      ]
-    });
-
-    tour.start();
-  }
 </script>
 
 <Router {url}>
-  <div class="app-container" in:fade>
-    {#if $isAuthenticated}
-      <Route 
-        path="/dashboard" 
-        component={Dashboard} 
-        let:params
-        let:location
-      >
-        {() => {
-          requireAuth();
-          return Dashboard;
-        }}
-      </Route>
-      <Route 
-        path="/conversations" 
-        component={Conversations}
-        let:params
-        let:location
-      >
-        {() => {
-          requireAuth();
-          return Conversations;
-        }}
-      </Route>
-      <!-- Redirect authenticated users trying to access auth pages -->
-      <Route 
-        path="/login" 
-        component={Login}
-        let:location
-      >
-        {() => {
-          requireNoAuth();
-          return Login;
-        }}
-      </Route>
-      <Route 
-        path="/signup" 
-        component={Signup}
-        let:location
-      >
-        {() => {
-          requireNoAuth();
-          return Signup;
-        }}
-      </Route>
-    {:else}
-      <Layout>
-        <Route path="/" component={Hero} />
-        <Route path="/features" component={Features} />
-        <Route path="/benefits" component={Benefits} />
-        <Route path="/pricing" component={Pricing} />
-        <Route 
-          path="/login" 
-          component={Login}
-          let:location
-        >
-          {() => {
-            requireNoAuth();
-            return Login;
-          }}
-        </Route>
-        <Route 
-          path="/signup" 
-          component={Signup}
-          let:location
-        >
-          {() => {
-            requireNoAuth();
-            return Signup;
-          }}
-        </Route>
-      </Layout>
-    {/if}
-    <!-- Catch-all route for 404s -->
+  <nav>
+    <div class="nav-left">
+      <Link to="/" class="logo">ContactingAI</Link>
+      <Link to="/features">Features</Link>
+      <Link to="/benefits">Benefits</Link>
+      <Link to="/pricing">Pricing</Link>
+    </div>
+    <div class="nav-right">
+      <Link to="/login" class="auth-link">Login</Link>
+      <Link to="/signup" class="auth-link signup">Sign Up</Link>
+    </div>
+  </nav>
+
+  <main>
+    <Route path="/" component={Home} />
+    <Route path="/features" component={Features} />
+    <Route path="/benefits" component={Benefits} />
+    <Route path="/pricing" component={Pricing} />
+    <Route path="/login" component={Login} />
+    <Route path="/signup" component={Signup} />
+    <Route path="/dashboard" component={Dashboard} />
+    <Route path="/conversations" component={Conversations} />
     <Route path="*" component={NotFound} />
-  </div>
+  </main>
 </Router>
 
 <style>
   :global(body) {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    background: #f7fafc;
   }
 
-  :global(*) {
-    box-sizing: border-box;
+  nav {
+    background: white;
+    padding: 1em 2em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
   }
 
-  :global(a) {
-    color: inherit;
+  .nav-left, .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 2em;
+  }
+
+  .logo {
+    font-weight: 700;
+    font-size: 1.2em;
+    color: #4f46e5;
     text-decoration: none;
   }
 
-  .app-container {
-    min-height: 100vh;
+  :global(nav a) {
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  :global(nav a:hover) {
+    color: #4f46e5;
+  }
+
+  .auth-link {
+    padding: 0.5em 1em;
+    border-radius: 20px;
+    transition: all 0.2s;
+  }
+
+  .auth-link.signup {
+    background: #4f46e5;
+    color: white;
+  }
+
+  .auth-link.signup:hover {
+    background: #4338ca;
+    color: white;
+  }
+
+  main {
+    min-height: calc(100vh - 64px);
+  }
+
+  @media (max-width: 768px) {
+    nav {
+      padding: 1em;
+    }
+
+    .nav-left, .nav-right {
+      gap: 1em;
+    }
+
+    :global(nav a) {
+      font-size: 0.9em;
+    }
   }
 </style>

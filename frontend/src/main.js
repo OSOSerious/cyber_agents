@@ -7,15 +7,4 @@ const app = new App({
   }
 });
 
-// Enable client-side routing
-window.addEventListener('click', e => {
-  const el = e.target;
-  if (el.tagName === 'A' && el.href.startsWith(window.location.origin)) {
-    e.preventDefault();
-    const url = new URL(el.href);
-    window.history.pushState(null, '', url.pathname);
-    window.dispatchEvent(new Event('popstate'));
-  }
-});
-
 export default app;
