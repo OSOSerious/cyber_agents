@@ -1,7 +1,7 @@
 <script>
   import { Router, Link, Route } from "svelte-routing";
   import Home from "./pages/Home.svelte";
-  import Features from "./pages/Features.svelte";
+  import Templates from "./components/Templates.svelte";
   import Benefits from "./pages/Benefits.svelte";
   import Pricing from "./pages/Pricing.svelte";
   import Login from "./pages/Login.svelte";
@@ -9,6 +9,7 @@
   import Dashboard from "./pages/Dashboard.svelte";
   import Conversations from './pages/Conversations.svelte';
   import NotFound from './pages/NotFound.svelte';
+  import CharacterBuilder from './pages/CharacterBuilder.svelte';
 
   export let url = "";
 </script>
@@ -16,10 +17,11 @@
 <Router {url}>
   <nav>
     <div class="nav-left">
-      <Link to="/" class="logo">ContactingAI</Link>
-      <Link to="/features">Features</Link>
-      <Link to="/benefits">Benefits</Link>
-      <Link to="/pricing">Pricing</Link>
+      <Link to="/" class="logo">AI Agent Studio</Link>
+      <Link to="/agents">My Agents</Link>
+      <Link to="/templates">Templates</Link>
+      <Link to="/deployments">Deployments</Link>
+      <Link to="/character-builder">Create Agent</Link>
     </div>
     <div class="nav-right">
       <Link to="/login" class="auth-link">Login</Link>
@@ -29,13 +31,14 @@
 
   <main>
     <Route path="/" component={Home} />
-    <Route path="/features" component={Features} />
-    <Route path="/benefits" component={Benefits} />
-    <Route path="/pricing" component={Pricing} />
+    <Route path="/agents" component={Dashboard} />
+    <Route path="/templates" component={Templates} />
+    <Route path="/deployments" component={Conversations} />
     <Route path="/login" component={Login} />
     <Route path="/signup" component={Signup} />
     <Route path="/dashboard" component={Dashboard} />
     <Route path="/conversations" component={Conversations} />
+    <Route path="/character-builder" component={CharacterBuilder} />
     <Route path="*" component={NotFound} />
   </main>
 </Router>

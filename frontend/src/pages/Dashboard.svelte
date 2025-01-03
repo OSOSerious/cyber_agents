@@ -1,349 +1,212 @@
 <script>
-  import { onMount } from 'svelte';
-  import { api } from '../services/api';
   import DashboardLayout from '../components/DashboardLayout.svelte';
+  import MyAgents from '../components/MyAgents.svelte';
+  import { onMount } from 'svelte';
 
-  let analytics = null;
-  let channelMetrics = null;
-  let aiAnalysis = null;
-  let loading = true;
-  let error = null;
+  let myAgentsComponent;
+  let activeConnections = [];
+  let documentStats = {
+    totalDocuments: 0,
+    processedDocuments: 0,
+    pendingDocuments: 0
+  };
 
   onMount(async () => {
-    try {
-      [analytics, channelMetrics, aiAnalysis] = await Promise.all([
-        api.getAnalytics(),
-        api.getChannelMetrics(),
-        api.getAIAnalysis()
-      ]);
-    } catch (e) {
-      error = e.message;
-    } finally {
-      loading = false;
-    }
+    // Simulated data - would be fetched from backend in production
+    activeConnections = [
+      { platform: 'Discord', status: 'connected', channels: 5 },
+      { platform: 'Twitter', status: 'connected', accounts: 2 },
+      { platform: 'Telegram', status: 'connected', groups: 3 }
+    ];
+
+    documentStats = {
+      totalDocuments: 156,
+      processedDocuments: 142,
+      pendingDocuments: 14
+    };
   });
 </script>
 
 <DashboardLayout>
-  <div class="dashboard">
-    <header>
-      <h1>AI Communication Hub</h1>
-      <button class="new-interaction">Start New Interaction</button>
-    </header>
+  <div class="dashboard-content">
 
-    {#if loading}
-      <div class="loading">Loading analytics...</div>
-    {:else if error}
-      <div class="error">{error}</div>
-    {:else}
-      <!-- Real-time Metrics -->
-      <section class="metrics-grid">
-        <div class="metric-card highlight">
-          <h3>Active Conversations</h3>
-          <div class="metric-content">
-            <div class="metric-main">
-              <span class="value">{analytics.active_conversations}</span>
-              <span class="label">Live Now</span>
-            </div>
-            <div class="metric-breakdown">
-              <div class="breakdown-item">
-                <span class="label">AI Handled</span>
-                <span class="value">{analytics.ai_handled}</span>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div class="col-span-2">
+        <MyAgents bind={myAgentsComponent} />
+      </div>
+
+      <div class="panel">
+        <h2>Platform Connections</h2>
+        <div class="connections-list">
+          {#each activeConnections as connection}
+            <div class="connection-card">
+              <div class="connection-header">
+                <h4>{connection.platform}</h4>
+                <span class="status-badge connected">Connected</span>
               </div>
-              <div class="breakdown-item">
-                <span class="label">Human Assisted</span>
-                <span class="value">{analytics.human_assisted}</span>
+              <div class="connection-details">
+                {#if connection.channels}
+                  <span>{connection.channels} channels</span>
+                {/if}
+                {#if connection.accounts}
+                  <span>{connection.accounts} accounts</span>
+                {/if}
+                {#if connection.groups}
+                  <span>{connection.groups} groups</span>
+                {/if}
               </div>
             </div>
-          </div>
+          {/each}
         </div>
 
-        <div class="metric-card">
-          <h3>Interaction Channels</h3>
-          <div class="channels-grid">
-            <div class="channel-item">
-              <span class="channel-icon">💬</span>
-              <span class="channel-name">Web Chat</span>
-              <span class="channel-value">{channelMetrics.web_chat}</span>
-            </div>
-            <div class="channel-item">
-              <span class="channel-icon">📱</span>
-              <span class="channel-name">SMS/iMessage</span>
-              <span class="channel-value">{channelMetrics.messaging}</span>
-            </div>
-            <div class="channel-item">
-              <span class="channel-icon">📞</span>
-              <span class="channel-name">Voice Call</span>
-              <span class="channel-value">{channelMetrics.voice}</span>
-            </div>
-            <div class="channel-item">
-              <span class="channel-icon">🤳</span>
-              <span class="channel-name">Video Chat</span>
-              <span class="channel-value">{channelMetrics.video}</span>
-            </div>
+        <h2 class="mt-6">Document Store</h2>
+        <div class="document-stats">
+          <div class="stat-row">
+            <span>Total Documents</span>
+            <span class="value">{documentStats.totalDocuments}</span>
+          </div>
+          <div class="stat-row">
+            <span>Processed</span>
+            <span class="value">{documentStats.processedDocuments}</span>
+          </div>
+          <div class="stat-row">
+            <span>Pending</span>
+            <span class="value">{documentStats.pendingDocuments}</span>
+          </div>
+          <div class="progress-bar">
+            <div 
+              class="progress" 
+              style="width: {(documentStats.processedDocuments / documentStats.totalDocuments) * 100}%"
+            ></div>
           </div>
         </div>
-
-        <div class="metric-card">
-          <h3>AI Analysis</h3>
-          <div class="ai-metrics">
-            <div class="ai-metric">
-              <span class="label">Intent Recognition</span>
-              <div class="progress-bar">
-                <div class="progress" style="width: {aiAnalysis.intent_recognition}%"></div>
-              </div>
-              <span class="value">{aiAnalysis.intent_recognition}%</span>
-            </div>
-            <div class="ai-metric">
-              <span class="label">Sentiment Score</span>
-              <div class="progress-bar">
-                <div class="progress" style="width: {aiAnalysis.sentiment_score}%"></div>
-              </div>
-              <span class="value">{aiAnalysis.sentiment_score}%</span>
-            </div>
-            <div class="ai-metric">
-              <span class="label">Resolution Rate</span>
-              <div class="progress-bar">
-                <div class="progress" style="width: {aiAnalysis.resolution_rate}%"></div>
-              </div>
-              <span class="value">{aiAnalysis.resolution_rate}%</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Interaction Flow -->
-      <section class="interaction-flow">
-        <h2>Interaction Flow</h2>
-        <div class="flow-cards">
-          <div class="flow-card">
-            <div class="flow-icon">🌐</div>
-            <h4>Source Channels</h4>
-            <ul>
-              <li>Website Traffic</li>
-              <li>Social Media</li>
-              <li>Direct Calls</li>
-              <li>Ad Response</li>
-            </ul>
-          </div>
-          <div class="flow-arrow">➜</div>
-          <div class="flow-card">
-            <div class="flow-icon">🤖</div>
-            <h4>AI Analysis</h4>
-            <ul>
-              <li>Intent Detection</li>
-              <li>Sentiment Analysis</li>
-              <li>Priority Scoring</li>
-              <li>Channel Selection</li>
-            </ul>
-          </div>
-          <div class="flow-arrow">➜</div>
-          <div class="flow-card">
-            <div class="flow-icon">🎯</div>
-            <h4>Engagement</h4>
-            <ul>
-              <li>AI Chat Support</li>
-              <li>Human Agent</li>
-              <li>Video Consultation</li>
-              <li>Voice Assistant</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-    {/if}
+      </div>
+    </div>
   </div>
 </DashboardLayout>
 
 <style>
-  .dashboard {
-    padding: 2em;
-    max-width: 1400px;
-    margin: 0 auto;
+  .dashboard-content {
+    padding: 1.5rem;
   }
 
-  header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2em;
+  .stat-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   }
 
-  h1 {
-    font-size: 2em;
-    color: #2d3748;
-    margin: 0;
+  .stat-card h3 {
+    color: #64748b;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
   }
 
-  .new-interaction {
-    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-    color: white;
-    border: none;
-    padding: 0.8em 1.5em;
-    border-radius: 25px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: transform 0.2s;
-    box-shadow: 0 4px 6px rgba(99, 102, 241, 0.2);
-  }
-
-  .new-interaction:hover {
-    transform: translateY(-2px);
-  }
-
-  .metrics-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5em;
-    margin-bottom: 2em;
-  }
-
-  .metric-card {
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(10px);
-    border-radius: 15px;
-    padding: 1.5em;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  }
-
-  .metric-card.highlight {
-    background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
-    color: white;
-  }
-
-  .metric-card h3 {
-    margin: 0 0 1em;
-    font-size: 1.1em;
-    color: inherit;
-  }
-
-  .channels-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1em;
-  }
-
-  .channel-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5em;
-    padding: 0.8em;
-    background: rgba(0, 0, 0, 0.03);
-    border-radius: 10px;
-  }
-
-  .channel-icon {
-    font-size: 1.2em;
-  }
-
-  .channel-name {
-    flex: 1;
-    font-size: 0.9em;
-  }
-
-  .channel-value {
+  .stat-value {
+    color: #1e293b;
+    font-size: 1.875rem;
     font-weight: 600;
   }
 
-  .ai-metrics {
-    display: grid;
-    gap: 1em;
+  .stat-desc {
+    color: #64748b;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
   }
 
-  .ai-metric {
+  .panel {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .panel h2 {
+    color: #1e293b;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+
+  .connections-list {
     display: grid;
-    grid-template-columns: 1fr 100px 50px;
+    gap: 1rem;
+  }
+
+  .connection-card {
+    padding: 1rem;
+    background: #f8fafc;
+    border-radius: 6px;
+  }
+
+  .connection-header {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 1em;
+    margin-bottom: 0.5rem;
+  }
+
+  .connection-header h4 {
+    color: #1e293b;
+    font-weight: 500;
+    margin: 0;
+  }
+
+  .status-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+  }
+
+  .status-badge.connected {
+    background: #dcfce7;
+    color: #166534;
+  }
+
+  .connection-details {
+    color: #64748b;
+    font-size: 0.875rem;
+  }
+
+  .document-stats {
+    background: #f8fafc;
+    padding: 1rem;
+    border-radius: 6px;
+  }
+
+  .stat-row {
+    display: flex;
+    justify-content: space-between;
+    color: #475569;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .stat-row .value {
+    font-weight: 500;
+    color: #1e293b;
   }
 
   .progress-bar {
     width: 100%;
-    height: 8px;
-    background: rgba(0, 0, 0, 0.05);
-    border-radius: 4px;
+    height: 4px;
+    background: #e2e8f0;
+    border-radius: 2px;
+    margin-top: 1rem;
     overflow: hidden;
   }
 
   .progress {
     height: 100%;
-    background: linear-gradient(90deg, #6366f1 0%, #4f46e5 100%);
-    border-radius: 4px;
-  }
-
-  .interaction-flow {
-    margin-top: 2em;
-  }
-
-  .interaction-flow h2 {
-    font-size: 1.5em;
-    margin-bottom: 1em;
-    color: #2d3748;
-  }
-
-  .flow-cards {
-    display: flex;
-    align-items: center;
-    gap: 1em;
-    overflow-x: auto;
-    padding: 1em 0;
-  }
-
-  .flow-card {
-    background: white;
-    border-radius: 15px;
-    padding: 1.5em;
-    min-width: 250px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  }
-
-  .flow-icon {
-    font-size: 2em;
-    margin-bottom: 0.5em;
-  }
-
-  .flow-card h4 {
-    margin: 0 0 1em;
-    color: #2d3748;
-  }
-
-  .flow-card ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .flow-card li {
-    padding: 0.5em 0;
-    color: #4a5568;
-    border-bottom: 1px solid #edf2f7;
-  }
-
-  .flow-card li:last-child {
-    border-bottom: none;
-  }
-
-  .flow-arrow {
-    font-size: 1.5em;
-    color: #4a5568;
+    background: #4f46e5;
+    border-radius: 2px;
+    transition: width 0.3s ease;
   }
 
   @media (max-width: 768px) {
-    .dashboard {
-      padding: 1em;
-    }
-
-    header {
-      flex-direction: column;
-      gap: 1em;
-      text-align: center;
-    }
-
-    .flow-cards {
-      flex-direction: column;
-    }
-
-    .flow-arrow {
-      transform: rotate(90deg);
+    .agent-metrics {
+      grid-template-columns: 1fr;
     }
   }
 </style>

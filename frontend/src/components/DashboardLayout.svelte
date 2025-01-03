@@ -1,300 +1,269 @@
 <script>
-  import { Link, navigate } from 'svelte-routing';
-  import { fade } from 'svelte/transition';
-  import { user, logout } from '../stores/auth';
+  import { Link } from "svelte-routing";
+  import { onMount } from 'svelte';
 
-  let isSidebarOpen = true;
-  let isUserMenuOpen = false;
+  let isMenuOpen = false;
+  let notifications = [];
 
-  function handleLogout() {
-    logout();
-    navigate('/login');
+  onMount(() => {
+    // Simulated notifications
+    notifications = [
+      { id: 1, type: 'info', message: 'TechInsightAI deployed to Discord' },
+      { id: 2, type: 'success', message: 'Document processing complete' },
+      { id: 3, type: 'warning', message: 'NarrativeForge needs API key update' }
+    ];
+  });
+
+  function toggleMenu() {
+    isMenuOpen = !isMenuOpen;
   }
-
-  const menuItems = [
-    {
-      icon: '',
-      label: 'Dashboard',
-      path: '/dashboard'
-    },
-    {
-      icon: '',
-      label: 'Conversations',
-      path: '/conversations'
-    },
-    {
-      icon: '',
-      label: 'Analytics',
-      path: '/analytics'
-    },
-    {
-      icon: '',
-      label: 'Settings',
-      path: '/settings'
-    }
-  ];
 </script>
 
-<div class="dashboard-layout" class:sidebar-collapsed={!isSidebarOpen}>
-  <aside class="sidebar" class:collapsed={!isSidebarOpen}>
-    <div class="sidebar-header">
-      <Link to="/dashboard" class="brand">
-        <img src="/logo.svg" alt="ContactingAI Logo" class="brand-logo" />
-        {#if isSidebarOpen}
-          <span class="brand-name">ContactingAI</span>
-        {/if}
+<div class="dashboard-layout">
+  <nav class="sidebar {isMenuOpen ? 'open' : ''}">
+    <button class="menu-toggle" on:click={toggleMenu}>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
+
+    <div class="nav-links">
+      <Link to="/dashboard" class="nav-link">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
+        </svg>
+        Dashboard
       </Link>
-      <button class="collapse-btn" on:click={() => isSidebarOpen = !isSidebarOpen}>
-        {#if isSidebarOpen}
-          <span></span>
-        {:else}
-          <span></span>
-        {/if}
-      </button>
+
+      <Link to="/character-builder" class="nav-link">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
+        </svg>
+        AI Agents
+      </Link>
+
+      <Link to="/templates" class="nav-link">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
+        </svg>
+        Templates
+      </Link>
+
+      <Link to="/documents" class="nav-link">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd" />
+        </svg>
+        Documents
+      </Link>
+
+      <Link to="/platforms" class="nav-link">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5zm3.293 1.293a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 01-1.414-1.414L7.586 10 5.293 7.707a1 1 0 010-1.414zM11 12a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd" />
+        </svg>
+        Platforms
+      </Link>
+
+      <Link to="/settings" class="nav-link">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
+        </svg>
+        Settings
+      </Link>
     </div>
+  </nav>
 
-    <nav class="sidebar-nav">
-      {#each menuItems as item}
-        <Link to={item.path} class="nav-item">
-          <span class="nav-icon">{item.icon}</span>
-          {#if isSidebarOpen}
-            <span class="nav-label">{item.label}</span>
-          {/if}
-        </Link>
-      {/each}
-    </nav>
-  </aside>
-
-  <main class="main-content">
+  <div class="main-content">
     <header class="top-bar">
-      <div class="user-menu">
-        <button 
-          class="user-button"
-          on:click={() => isUserMenuOpen = !isUserMenuOpen}
-          aria-expanded={isUserMenuOpen}
-          aria-haspopup="true"
-        >
-          <span class="user-avatar"></span>
-          {#if isSidebarOpen}
-            <span class="user-name">{$user?.name || 'User'}</span>
-          {/if}
+      <div class="quick-actions">
+        <button class="action-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+          </svg>
+          Deploy Agent
         </button>
+        <button class="action-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+          </svg>
+          Upload Documents
+        </button>
+      </div>
 
-        {#if isUserMenuOpen}
-          <div 
-            class="user-dropdown"
-            transition:fade
-            role="menu"
-            aria-label="User menu"
-          >
-            <Link to="/profile" role="menuitem">Profile</Link>
-            <Link to="/settings" role="menuitem">Settings</Link>
-            <button on:click={handleLogout} role="menuitem">Logout</button>
+      <div class="notifications">
+        {#each notifications as notification}
+          <div class="notification {notification.type}">
+            {notification.message}
           </div>
-        {/if}
+        {/each}
       </div>
     </header>
 
-    <div class="content">
-      <slot />
-    </div>
-  </main>
+    <main class="content">
+      <slot></slot>
+    </main>
+  </div>
 </div>
 
 <style>
   .dashboard-layout {
-    display: grid;
-    grid-template-columns: auto 1fr;
+    display: flex;
     min-height: 100vh;
-    background: #1a1a1a;
   }
 
   .sidebar {
-    width: 240px;
-    background: #222;
-    border-right: 1px solid #333;
-    transition: width 0.3s;
-    overflow: hidden;
-  }
-
-  .sidebar.collapsed {
-    width: 72px;
-  }
-
-  .sidebar-header {
-    padding: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid #333;
-  }
-
-  .brand {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+    width: 260px;
+    background: #1e293b;
     color: white;
-    text-decoration: none;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease;
   }
 
-  .brand-logo {
-    width: 32px;
-    height: 32px;
-  }
-
-  .brand-name {
-    font-size: 1.2rem;
-    font-weight: 500;
-  }
-
-  .collapse-btn {
+  .menu-toggle {
+    display: none;
     background: none;
     border: none;
-    color: #666;
-    cursor: pointer;
-    padding: 0.5rem;
-    border-radius: 0.25rem;
-    transition: color 0.2s;
-  }
-
-  .collapse-btn:hover {
     color: white;
+    cursor: pointer;
+    margin-bottom: 1rem;
   }
 
-  .sidebar-nav {
-    padding: 1rem 0;
+  .nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
   }
 
-  .nav-item {
+  .nav-link {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding: 0.75rem 1rem;
-    color: #999;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    color: #94a3b8;
     text-decoration: none;
+    border-radius: 6px;
     transition: all 0.2s;
   }
 
-  .nav-item:hover {
-    background: #2a2a2a;
+  .nav-link:hover {
+    background: #2d3748;
     color: white;
   }
 
-  .nav-icon {
-    font-size: 1.25rem;
-    min-width: 24px;
-    text-align: center;
+  .nav-link .icon {
+    width: 20px;
+    height: 20px;
   }
 
   .main-content {
+    flex: 1;
+    background: #f1f5f9;
     display: flex;
     flex-direction: column;
-    background: #1a1a1a;
-    color: white;
   }
 
   .top-bar {
-    height: 64px;
-    padding: 0 2rem;
+    background: white;
+    padding: 1rem 1.5rem;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: flex-end;
-    background: #222;
-    border-bottom: 1px solid #333;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   }
 
-  .user-menu {
-    position: relative;
+  .quick-actions {
+    display: flex;
+    gap: 1rem;
   }
 
-  .user-button {
+  .action-btn {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    background: none;
-    border: none;
+    padding: 0.5rem 1rem;
+    background: #4f46e5;
     color: white;
-    padding: 0.5rem;
+    border: none;
+    border-radius: 6px;
     cursor: pointer;
-    border-radius: 0.25rem;
     transition: background-color 0.2s;
   }
 
-  .user-button:hover {
-    background: #2a2a2a;
+  .action-btn:hover {
+    background: #4338ca;
   }
 
-  .user-avatar {
-    font-size: 1.25rem;
+  .action-btn .icon {
+    width: 20px;
+    height: 20px;
   }
 
-  .user-name {
-    font-size: 0.9rem;
+  .notifications {
+    display: flex;
+    gap: 1rem;
   }
 
-  .user-dropdown {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    margin-top: 0.5rem;
-    background: #222;
-    border: 1px solid #333;
-    border-radius: 0.5rem;
-    min-width: 160px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    z-index: 100;
+  .notification {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.875rem;
   }
 
-  .user-dropdown a,
-  .user-dropdown button {
-    display: block;
-    width: 100%;
-    padding: 0.75rem 1rem;
-    color: #999;
-    text-decoration: none;
-    background: none;
-    border: none;
-    text-align: left;
-    cursor: pointer;
-    transition: all 0.2s;
+  .notification.info {
+    background: #dbeafe;
+    color: #1e40af;
   }
 
-  .user-dropdown a:hover,
-  .user-dropdown button:hover {
-    background: #2a2a2a;
-    color: white;
+  .notification.success {
+    background: #dcfce7;
+    color: #166534;
+  }
+
+  .notification.warning {
+    background: #fef3c7;
+    color: #92400e;
   }
 
   .content {
     flex: 1;
-    padding: 2rem;
-    overflow-y: auto;
+    padding: 1.5rem;
   }
 
   @media (max-width: 768px) {
-    .dashboard-layout {
-      grid-template-columns: 1fr;
-    }
-
     .sidebar {
       position: fixed;
-      left: 0;
       top: 0;
       bottom: 0;
-      z-index: 1000;
+      z-index: 50;
       transform: translateX(-100%);
     }
 
-    .sidebar.active {
+    .sidebar.open {
       transform: translateX(0);
     }
 
-    .top-bar {
-      padding: 0 1rem;
+    .menu-toggle {
+      display: block;
     }
 
-    .content {
-      padding: 1rem;
+    .main-content {
+      margin-left: 0;
+    }
+
+    .top-bar {
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .quick-actions {
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    .notifications {
+      width: 100%;
+      flex-direction: column;
     }
   }
 </style>

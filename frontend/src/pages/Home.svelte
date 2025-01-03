@@ -5,63 +5,89 @@
 <div class="home">
   <div class="hero">
     <div class="hero-content">
-      <h1>AI-Powered Communication Platform</h1>
-      <p>Transform your customer interactions with intelligent, multi-channel communication</p>
+      <h1>Build Powerful AI Agents</h1>
+      <p>Create, deploy, and manage autonomous AI agents with advanced capabilities and multi-platform support</p>
       <div class="cta-buttons">
-        <Link to="/signup" class="cta-button primary">Get Started</Link>
-        <Link to="/features" class="cta-button secondary">Learn More</Link>
+        <Link to="/character-builder" class="cta-button primary">Create Agent</Link>
+        <Link to="/templates" class="cta-button secondary">Browse Templates</Link>
       </div>
     </div>
   </div>
 
   <section class="features">
-    <h2>Why Choose ContactingAI?</h2>
+    <h2>Core Features</h2>
     <div class="feature-grid">
       <div class="feature-card">
         <div class="feature-icon">🤖</div>
-        <h3>AI-Powered Interactions</h3>
-        <p>Smart routing and real-time analysis of customer interactions</p>
+        <h3>Multi-Model Support</h3>
+        <p>Use any AI model: Llama, Grok, OpenAI, Anthropic, and more</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">💬</div>
-        <h3>Multi-Channel Support</h3>
-        <p>Seamless communication across chat, voice, and video</p>
+        <div class="feature-icon">🔗</div>
+        <h3>Platform Integration</h3>
+        <p>Full-featured Discord, Twitter, and Telegram connectors</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">📊</div>
-        <h3>Advanced Analytics</h3>
-        <p>Deep insights into customer sentiment and interaction patterns</p>
+        <div class="feature-icon">👥</div>
+        <h3>Multi-Agent System</h3>
+        <p>Create agent teams with shared contexts and collaborative capabilities</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">🔄</div>
-        <h3>Smart Handoff</h3>
-        <p>Seamless transition between AI and human agents</p>
+        <div class="feature-icon">💾</div>
+        <h3>Memory Management</h3>
+        <p>Advanced retrievable memory and document store system</p>
       </div>
     </div>
   </section>
 
-  <section class="channels">
-    <h2>Communication Channels</h2>
-    <div class="channel-grid">
-      <div class="channel-card">
-        <span class="channel-icon">💬</span>
-        <h3>Web Chat</h3>
-        <p>Instant AI-powered web chat support</p>
+  <section class="capabilities">
+    <h2>Advanced Capabilities</h2>
+    <div class="capability-grid">
+      <div class="capability-card">
+        <span class="capability-icon">📚</span>
+        <h3>Document Processing</h3>
+        <p>Easily ingest and interact with documents, PDFs, and knowledge bases</p>
       </div>
-      <div class="channel-card">
-        <span class="channel-icon">📞</span>
-        <h3>Voice Calls</h3>
-        <p>Smart voice interaction handling</p>
+      <div class="capability-card">
+        <span class="capability-icon">🔄</span>
+        <h3>Extensible System</h3>
+        <p>Create custom actions and clients to extend agent capabilities</p>
       </div>
-      <div class="channel-card">
-        <span class="channel-icon">🤳</span>
-        <h3>Video Chat</h3>
-        <p>Face-to-face customer support</p>
+      <div class="capability-card">
+        <span class="capability-icon">🎮</span>
+        <h3>Interactive Agents</h3>
+        <p>Build chatbots, game characters, and autonomous business agents</p>
       </div>
-      <div class="channel-card">
-        <span class="channel-icon">📱</span>
-        <h3>SMS/iMessage</h3>
-        <p>Direct messaging integration</p>
+      <div class="capability-card">
+        <span class="capability-icon">🚀</span>
+        <h3>Easy Deployment</h3>
+        <p>Simple setup and deployment across multiple platforms</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="use-cases">
+    <h2>Use Cases</h2>
+    <div class="use-case-grid">
+      <div class="use-case-card">
+        <span class="use-case-icon">🤖</span>
+        <h3>Chatbots</h3>
+        <p>Create engaging conversational agents for customer support and interaction</p>
+      </div>
+      <div class="use-case-card">
+        <span class="use-case-icon">🕵️</span>
+        <h3>Autonomous Agents</h3>
+        <p>Build self-directed agents that can accomplish complex tasks</p>
+      </div>
+      <div class="use-case-card">
+        <span class="use-case-icon">📈</span>
+        <h3>Business Process</h3>
+        <p>Automate and enhance business workflows with intelligent agents</p>
+      </div>
+      <div class="use-case-card">
+        <span class="use-case-icon">🎮</span>
+        <h3>Gaming & Entertainment</h3>
+        <p>Create interactive NPCs and game characters with personality</p>
       </div>
     </div>
   </section>
@@ -134,7 +160,9 @@
     margin: 0 0 2em;
   }
 
-  .feature-grid, .channel-grid {
+  .feature-grid,
+  .capability-grid,
+  .use-case-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 2em;
@@ -142,7 +170,9 @@
     margin: 0 auto;
   }
 
-  .feature-card, .channel-card {
+  .feature-card,
+  .capability-card,
+  .use-case-card {
     background: white;
     padding: 2em;
     border-radius: 15px;
@@ -151,11 +181,15 @@
     transition: transform 0.2s;
   }
 
-  .feature-card:hover, .channel-card:hover {
+  .feature-card:hover,
+  .capability-card:hover,
+  .use-case-card:hover {
     transform: translateY(-5px);
   }
 
-  .feature-icon, .channel-icon {
+  .feature-icon,
+  .capability-icon,
+  .use-case-icon {
     font-size: 2.5em;
     margin-bottom: 0.5em;
   }
@@ -171,8 +205,12 @@
     line-height: 1.6;
   }
 
-  .channels {
+  .capabilities {
     background: #f7fafc;
+  }
+
+  .use-cases {
+    background: #edf2f7;
   }
 
   @media (max-width: 768px) {

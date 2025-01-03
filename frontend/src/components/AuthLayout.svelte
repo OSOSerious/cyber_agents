@@ -7,8 +7,7 @@
   <div class="auth-content">
     <div class="auth-left">
       <Link to="/" class="brand">
-        <img src="/logo.svg" alt="ContactingAI Logo" class="auth-logo" />
-        <span class="brand-name">ContactingAI</span>
+        <span class="brand-name">AI Agent Studio</span>
       </Link>
       <div class="auth-form-container">
         <slot />
@@ -16,7 +15,7 @@
     </div>
     <div class="auth-right">
       <div class="testimonial">
-        <div class="quote">"ContactingAI transformed our customer communication. Response times dropped from hours to seconds."</div>
+        <div class="quote">"Our AI agents have revolutionized how we interact with customers, providing instant, intelligent responses 24/7."</div>
         <div class="author">
           <img src="/testimonial-avatar.jpg" alt="Sarah Johnson" class="author-image" />
           <div class="author-info">
@@ -62,11 +61,6 @@
     gap: 1rem;
     text-decoration: none;
     margin-bottom: 3rem;
-  }
-
-  .auth-logo {
-    height: 2rem;
-    width: auto;
   }
 
   .brand-name {
