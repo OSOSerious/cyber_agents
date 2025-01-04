@@ -7,5 +7,4 @@
     </linearGradient>
   </defs>
   <circle cx="100" cy="100" r="90" fill="url(#grad)"/>
-  <text x="100" y="120" font-family="Arial" font-size="60" font-weight="bold" fill="white" text-anchor="middle">C.AI</text>
 </svg>

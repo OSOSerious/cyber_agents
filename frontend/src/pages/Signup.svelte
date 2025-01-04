@@ -13,6 +13,50 @@
 
   $: passwordsMatch = password === confirmPassword;
 
+  async function handleDiscordSignup() {
+    loading = true;
+    error = '';
+
+    try {
+      // TODO: Replace with actual Discord OAuth flow
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Simulate successful signup
+      isAuthenticated.set(true);
+      user.set({
+        name: 'Discord User',
+        email: 'discord@example.com'
+      });
+      navigate('/dashboard');
+    } catch (err) {
+      error = err.message || 'An error occurred during Discord signup';
+    } finally {
+      loading = false;
+    }
+  }
+
+  async function handleTelegramSignup() {
+    loading = true;
+    error = '';
+
+    try {
+      // TODO: Replace with actual Telegram OAuth flow
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Simulate successful signup
+      isAuthenticated.set(true);
+      user.set({
+        name: 'Telegram User',
+        email: 'telegram@example.com'
+      });
+      navigate('/dashboard');
+    } catch (err) {
+      error = err.message || 'An error occurred during Telegram signup';
+    } finally {
+      loading = false;
+    }
+  }
+
   async function handleSignup(e) {
     e.preventDefault();
     
@@ -52,6 +96,28 @@
   <div class="signup-form">
     <h1>Create your account</h1>
     <p class="subtitle">Start your 14-day free trial, no credit card required</p>
+
+    <div class="social-signup">
+      <button class="social-button discord" on:click|preventDefault={handleDiscordSignup} disabled={loading}>
+        <img src="/icons/discord.svg" alt="Discord" />
+        {#if loading}
+          <span class="loader"></span>
+        {:else}
+          Sign up with Discord
+        {/if}
+      </button>
+      <button class="social-button telegram" on:click|preventDefault={handleTelegramSignup} disabled={loading}>
+        <img src="/icons/telegram.svg" alt="Telegram" />
+        {#if loading}
+          <span class="loader"></span>
+        {:else}
+          Sign up with Telegram
+        {/if}
+      </button>
+      <div class="divider">
+        <span>or sign up with email</span>
+      </div>
+    </div>
 
     {#if error}
       <div class="error-message">
@@ -139,7 +205,95 @@
 <style>
   .signup-form {
     width: 100%;
-    max-width: 400px;
+    max-width: 440px;
+    padding: 2rem;
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05),
+                0 10px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .social-signup {
+    margin-bottom: 2rem;
+  }
+
+  .social-button {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    background: white;
+    color: #1a1a1a;
+    font-size: 1rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 1rem;
+  }
+
+  .social-button:hover {
+    background: #f9fafb;
+    border-color: #d1d5db;
+  }
+
+  .social-button img {
+    width: 24px;
+    height: 24px;
+  }
+
+  .social-button.discord {
+    background: #5865F2;
+    border-color: #5865F2;
+    color: white;
+  }
+
+  .social-button.discord:hover {
+    background: #4752c4;
+  }
+
+  .social-button.telegram {
+    background: #0088cc;
+    border-color: #0088cc;
+    color: white;
+  }
+
+  .social-button.telegram:hover {
+    background: #0077b3;
+  }
+
+  .divider {
+    position: relative;
+    text-align: center;
+    margin: 1.5rem 0;
+  }
+
+  .divider::before,
+  .divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: calc(50% - 4rem);
+    height: 1px;
+    background: #e5e7eb;
+  }
+
+  .divider::before {
+    left: 0;
+  }
+
+  .divider::after {
+    right: 0;
+  }
+
+  .divider span {
+    background: white;
+    padding: 0 1rem;
+    color: #6b7280;
+    font-size: 0.9rem;
   }
 
   h1 {

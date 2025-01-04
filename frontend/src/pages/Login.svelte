@@ -24,7 +24,7 @@
           email: email,
           name: 'Demo User'
         });
-        navigate('/dashboard');
+        navigate('/agents');
       } else {
         error = 'Invalid email or password';
       }
@@ -37,15 +37,32 @@
 </script>
 
 <AuthLayout>
-  <div class="login-form">
-    <h1>Welcome back</h1>
-    <p class="subtitle">Sign in to your account to continue</p>
+  <div class="login-container">
+    <div class="login-header">
+      <img src="/logo.svg" alt="Logo" class="logo" />
+      <h1>Welcome back</h1>
+      <p class="subtitle">Access your AI agents and analytics</p>
+    </div>
 
     {#if error}
       <div class="error-message">
         {error}
       </div>
     {/if}
+
+    <div class="social-login">
+      <button class="social-button discord">
+        <img src="/icons/discord.svg" alt="Discord" />
+        Continue with Discord
+      </button>
+      <button class="social-button telegram">
+        <img src="/icons/telegram.svg" alt="Telegram" />
+        Continue with Telegram
+      </button>
+      <div class="divider">
+        <span>or continue with email</span>
+      </div>
+    </div>
 
     <form on:submit={handleLogin}>
       <div class="form-group">
@@ -99,20 +116,121 @@
 </AuthLayout>
 
 <style>
-  .login-form {
+  .login-container {
     width: 100%;
-    max-width: 400px;
+    max-width: 440px;
+    padding: 2rem;
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05),
+                0 10px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .login-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .logo {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 1.5rem;
   }
 
   h1 {
     font-size: 2rem;
     color: #1a1a1a;
     margin-bottom: 0.5rem;
+    font-weight: 700;
   }
 
   .subtitle {
     color: #666;
     margin-bottom: 2rem;
+    font-size: 1.1rem;
+  }
+
+  .social-login {
+    margin-bottom: 2rem;
+  }
+
+  .social-button {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    background: white;
+    color: #1a1a1a;
+    font-size: 1rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 1rem;
+  }
+
+  .social-button:hover {
+    background: #f9fafb;
+    border-color: #d1d5db;
+  }
+
+  .social-button img {
+    width: 24px;
+    height: 24px;
+  }
+
+  .social-button.discord {
+    background: #5865F2;
+    border-color: #5865F2;
+    color: white;
+  }
+
+  .social-button.discord:hover {
+    background: #4752c4;
+  }
+
+  .social-button.telegram {
+    background: #0088cc;
+    border-color: #0088cc;
+    color: white;
+  }
+
+  .social-button.telegram:hover {
+    background: #0077b3;
+  }
+
+  .divider {
+    position: relative;
+    text-align: center;
+    margin: 1.5rem 0;
+  }
+
+  .divider::before,
+  .divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: calc(50% - 4rem);
+    height: 1px;
+    background: #e5e7eb;
+  }
+
+  .divider::before {
+    left: 0;
+  }
+
+  .divider::after {
+    right: 0;
+  }
+
+  .divider span {
+    background: white;
+    padding: 0 1rem;
+    color: #6b7280;
+    font-size: 0.9rem;
   }
 
   .error-message {
@@ -183,14 +301,14 @@
   .login-button {
     width: 100%;
     padding: 0.75rem;
-    background: #4a90e2;
+    background: linear-gradient(135deg, #4f46e5 0%, #2563eb 100%);
     color: white;
     border: none;
     border-radius: 0.5rem;
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: all 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -198,12 +316,16 @@
   }
 
   .login-button:hover {
-    background: #357abd;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
   }
 
   .login-button:disabled {
-    background: #93c5fd;
+    background: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%);
+    opacity: 0.7;
     cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
   }
 
   .loader {

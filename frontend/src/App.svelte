@@ -1,45 +1,138 @@
 <script>
-  import { Router, Link, Route } from "svelte-routing";
+  import { Router, Link, Route, navigate } from "svelte-routing";
+  import { onMount } from "svelte";
+  import { isAuthenticated } from "./stores/auth";
   import Home from "./pages/Home.svelte";
-  import Templates from "./components/Templates.svelte";
-  import Benefits from "./pages/Benefits.svelte";
-  import Pricing from "./pages/Pricing.svelte";
   import Login from "./pages/Login.svelte";
   import Signup from "./pages/Signup.svelte";
   import Dashboard from "./pages/Dashboard.svelte";
+  import MyAgents from "./components/MyAgents.svelte";
+  import DashboardLayout from "./components/DashboardLayout.svelte";
   import Conversations from './pages/Conversations.svelte';
   import NotFound from './pages/NotFound.svelte';
   import CharacterBuilder from './pages/CharacterBuilder.svelte';
+  import Templates from "./components/Templates.svelte";
+  import AgentProfile from "./pages/AgentProfile.svelte";
+  import Analytics from "./pages/Analytics.svelte";
+  import Tutorials from "./pages/Tutorials.svelte";
+  import Deployments from "./pages/Deployments.svelte";
 
   export let url = "";
+
+  // Protected routes that require authentication
+  const protectedRoutes = [
+    '/agents',
+    '/templates',
+    '/deployments', 
+    '/analytics',
+    '/tutorials',
+    '/character-builder',
+    '/dashboard',
+    '/conversations'
+  ];
+
+  // Check if current route is protected
+  function isProtectedRoute(path) {
+    return protectedRoutes.some(route => path.startsWith(route));
+  }
+
+  // Handle route protection
+  function handleNavigation(event) {
+    const path = new URL(event.detail.href).pathname;
+    if (isProtectedRoute(path) && !$isAuthenticated) {
+      event.preventDefault();
+      navigate('/login');
+    }
+  }
+
+  onMount(() => {
+    // Check current path on mount
+    if (isProtectedRoute(window.location.pathname) && !$isAuthenticated) {
+      navigate('/login');
+    }
+  });
 </script>
 
-<Router {url}>
+<Router {url} on:navigate={handleNavigation}>
   <nav>
     <div class="nav-left">
       <Link to="/" class="logo">AI Agent Studio</Link>
-      <Link to="/agents">My Agents</Link>
-      <Link to="/templates">Templates</Link>
-      <Link to="/deployments">Deployments</Link>
-      <Link to="/character-builder">Create Agent</Link>
+      {#if $isAuthenticated}
+        <Link to="/agents">My Agents</Link>
+        <Link to="/templates">Templates</Link>
+        <Link to="/deployments">Deployments</Link>
+        <Link to="/analytics">Analytics</Link>
+        <Link to="/tutorials">Tutorials</Link>
+        <Link to="/character-builder">Create Agent</Link>
+      {/if}
     </div>
     <div class="nav-right">
-      <Link to="/login" class="auth-link">Login</Link>
-      <Link to="/signup" class="auth-link signup">Sign Up</Link>
+      {#if $isAuthenticated}
+        <button class="auth-link" on:click={() => {
+          isAuthenticated.set(false);
+          navigate('/');
+        }}>Logout</button>
+      {:else}
+        <Link to="/login" class="auth-link">Login</Link>
+        <Link to="/signup" class="auth-link signup">Sign Up</Link>
+      {/if}
     </div>
   </nav>
 
   <main>
     <Route path="/" component={Home} />
-    <Route path="/agents" component={Dashboard} />
-    <Route path="/templates" component={Templates} />
-    <Route path="/deployments" component={Conversations} />
     <Route path="/login" component={Login} />
     <Route path="/signup" component={Signup} />
-    <Route path="/dashboard" component={Dashboard} />
-    <Route path="/conversations" component={Conversations} />
-    <Route path="/character-builder" component={CharacterBuilder} />
-    <Route path="*" component={NotFound} />
+    {#if $isAuthenticated}
+      <Route path="/agents" let:params>
+        <DashboardLayout>
+          <MyAgents />
+        </DashboardLayout>
+      </Route>
+      <Route path="/agents/:id" let:params>
+        <DashboardLayout>
+          <AgentProfile agentId={params.id} />
+        </DashboardLayout>
+      </Route>
+      <Route path="/templates">
+        <DashboardLayout>
+          <Templates />
+        </DashboardLayout>
+      </Route>
+      <Route path="/deployments">
+        <DashboardLayout>
+          <Deployments />
+        </DashboardLayout>
+      </Route>
+      <Route path="/analytics">
+        <DashboardLayout>
+          <Analytics />
+        </DashboardLayout>
+      </Route>
+      <Route path="/tutorials">
+        <DashboardLayout>
+          <Tutorials />
+        </DashboardLayout>
+      </Route>
+      <Route path="/dashboard">
+        <DashboardLayout>
+          <Dashboard />
+        </DashboardLayout>
+      </Route>
+      <Route path="/conversations">
+        <DashboardLayout>
+          <Conversations />
+        </DashboardLayout>
+      </Route>
+      <Route path="/character-builder">
+        <DashboardLayout>
+          <CharacterBuilder />
+        </DashboardLayout>
+      </Route>
+    {/if}
+    <Route path="*" let:params>
+      <NotFound />
+    </Route>
   </main>
 </Router>
 
@@ -90,6 +183,16 @@
     padding: 0.5em 1em;
     border-radius: 20px;
     transition: all 0.2s;
+    border: none;
+    font-size: 1em;
+    font-weight: 500;
+    cursor: pointer;
+    background: none;
+    color: #4a5568;
+  }
+
+  .auth-link:hover {
+    color: #4f46e5;
   }
 
   .auth-link.signup {
@@ -104,6 +207,15 @@
 
   main {
     min-height: calc(100vh - 64px);
+    margin-top: 64px; /* Account for fixed nav */
+  }
+
+  nav {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
   }
 
   @media (max-width: 768px) {

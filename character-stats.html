@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Stats</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1a1a1a;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .character-card {
+            background-color: #2a2a2a;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        .stat {
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        .progress-bar {
+            background-color: #3a3a3a;
+            height: 12px;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .wisdom .progress {
+            background-color: #4a90e2;
+            width: 40%;
+        }
+
+        .health .progress {
+            background-color: #2ecc71;
+            width: 60%;
+        }
+
+        .strength .progress {
+            background-color: #e74c3c;
+            width: 90%;
+        }
+
+        .character-routine {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #3a3a3a;
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        h2 {
+            margin: 0 0 1.5rem 0;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="character-card">
+        <h2>Warrior Character</h2>
+        
+        <div class="stat wisdom">
+            <div class="stat-label">
+                <span>Wisdom</span>
+                <span>4/10</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress"></div>
+            </div>
+        </div>
+
+        <div class="stat health">
+            <div class="stat-label">
+                <span>Health</span>
+                <span>6/10</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress"></div>
+            </div>
+        </div>
+
+        <div class="stat strength">
+            <div class="stat-label">
+                <span>Strength</span>
+                <span>9/10</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress"></div>
+            </div>
+        </div>
+
+        <div class="character-routine">
+            <p>Daily Routine:</p>
+            - Spends 4 hours at the training grounds<br>
+            - Minimal time studying or meditation<br>
+            - Focuses on physical conditioning<br>
+            - Maintains basic health through exercise<br>
+            - Prefers action over contemplation
+        </div>
+    </div>
+</body>
+</html>

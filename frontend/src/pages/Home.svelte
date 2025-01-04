@@ -5,89 +5,95 @@
 <div class="home">
   <div class="hero">
     <div class="hero-content">
-      <h1>Build Powerful AI Agents</h1>
-      <p>Create, deploy, and manage autonomous AI agents with advanced capabilities and multi-platform support</p>
+      <span class="hero-badge">AI-Powered Communication Platform</span>
+      <h1>Transform Your Digital Presence with AI Agents</h1>
+      <p>Automate customer engagement across Discord, Twitter, and Telegram with intelligent AI agents that understand your brand voice</p>
+      <div class="stats-row">
+        <div class="stat-item">
+          <span class="stat-number">10k+</span>
+          <span class="stat-label">Active Agents</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">98%</span>
+          <span class="stat-label">Response Rate</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">24/7</span>
+          <span class="stat-label">Availability</span>
+        </div>
+      </div>
       <div class="cta-buttons">
-        <Link to="/character-builder" class="cta-button primary">Create Agent</Link>
-        <Link to="/templates" class="cta-button secondary">Browse Templates</Link>
+        <Link to="/signup" class="cta-button primary">Get Started Free</Link>
+        <Link to="/login" class="cta-button secondary">Sign In</Link>
       </div>
     </div>
   </div>
 
+  <section class="social-proof">
+    <div class="platform-logos">
+      <img src="/icons/discord.svg" alt="Discord" class="platform-logo" />
+      <img src="/icons/telegram.svg" alt="Telegram" class="platform-logo" />
+      <span class="platform-text">Trusted by leading communities across major platforms</span>
+    </div>
+  </section>
+
   <section class="features">
-    <h2>Core Features</h2>
+    <h2>Why Choose Our Platform?</h2>
     <div class="feature-grid">
       <div class="feature-card">
-        <div class="feature-icon">🤖</div>
-        <h3>Multi-Model Support</h3>
-        <p>Use any AI model: Llama, Grok, OpenAI, Anthropic, and more</p>
+        <div class="feature-icon">🎯</div>
+        <h3>Instant Setup</h3>
+        <p>Deploy your first AI agent in under 5 minutes with our intuitive interface</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">🔗</div>
-        <h3>Platform Integration</h3>
-        <p>Full-featured Discord, Twitter, and Telegram connectors</p>
+        <div class="feature-icon">🧠</div>
+        <h3>Smart Learning</h3>
+        <p>Agents learn from interactions to provide increasingly personalized responses</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">👥</div>
-        <h3>Multi-Agent System</h3>
-        <p>Create agent teams with shared contexts and collaborative capabilities</p>
+        <div class="feature-icon">📊</div>
+        <h3>Rich Analytics</h3>
+        <p>Track engagement, response times, and satisfaction scores in real-time</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">💾</div>
-        <h3>Memory Management</h3>
-        <p>Advanced retrievable memory and document store system</p>
+        <div class="feature-icon">🔒</div>
+        <h3>Enterprise Security</h3>
+        <p>Bank-grade encryption and data protection for peace of mind</p>
       </div>
     </div>
   </section>
 
-  <section class="capabilities">
-    <h2>Advanced Capabilities</h2>
-    <div class="capability-grid">
-      <div class="capability-card">
-        <span class="capability-icon">📚</span>
-        <h3>Document Processing</h3>
-        <p>Easily ingest and interact with documents, PDFs, and knowledge bases</p>
+  <section class="testimonials">
+    <h2>What Our Users Say</h2>
+    <div class="testimonial-grid">
+      <div class="testimonial-card">
+        <div class="testimonial-content">
+          <p>"Transformed our community management. Our Discord engagement increased by 300% within the first month."</p>
+          <div class="testimonial-author">
+            <strong>Sarah Chen</strong>
+            <span>Community Manager, GamersUnite</span>
+          </div>
+        </div>
       </div>
-      <div class="capability-card">
-        <span class="capability-icon">🔄</span>
-        <h3>Extensible System</h3>
-        <p>Create custom actions and clients to extend agent capabilities</p>
-      </div>
-      <div class="capability-card">
-        <span class="capability-icon">🎮</span>
-        <h3>Interactive Agents</h3>
-        <p>Build chatbots, game characters, and autonomous business agents</p>
-      </div>
-      <div class="capability-card">
-        <span class="capability-icon">🚀</span>
-        <h3>Easy Deployment</h3>
-        <p>Simple setup and deployment across multiple platforms</p>
+      <div class="testimonial-card">
+        <div class="testimonial-content">
+          <p>"The AI agents handle 90% of routine inquiries, letting our team focus on strategic initiatives."</p>
+          <div class="testimonial-author">
+            <strong>Mark Thompson</strong>
+            <span>Support Lead, TechStart</span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="use-cases">
-    <h2>Use Cases</h2>
-    <div class="use-case-grid">
-      <div class="use-case-card">
-        <span class="use-case-icon">🤖</span>
-        <h3>Chatbots</h3>
-        <p>Create engaging conversational agents for customer support and interaction</p>
-      </div>
-      <div class="use-case-card">
-        <span class="use-case-icon">🕵️</span>
-        <h3>Autonomous Agents</h3>
-        <p>Build self-directed agents that can accomplish complex tasks</p>
-      </div>
-      <div class="use-case-card">
-        <span class="use-case-icon">📈</span>
-        <h3>Business Process</h3>
-        <p>Automate and enhance business workflows with intelligent agents</p>
-      </div>
-      <div class="use-case-card">
-        <span class="use-case-icon">🎮</span>
-        <h3>Gaming & Entertainment</h3>
-        <p>Create interactive NPCs and game characters with personality</p>
+  <section class="cta-section">
+    <div class="cta-content">
+      <h2>Ready to Transform Your Digital Presence?</h2>
+      <p>Join thousands of businesses already using our AI agents to scale their communication</p>
+      <div class="cta-buttons final">
+        <Link to="/signup" class="cta-button primary">Create Your First Agent</Link>
+        <p class="no-credit-card">No credit card required</p>
       </div>
     </div>
   </section>
@@ -99,26 +105,101 @@
   }
 
   .hero {
-    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    background: linear-gradient(135deg, #4f46e5 0%, #2563eb 100%);
     color: white;
-    padding: 4em 2em;
+    padding: 6em 2em;
     text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('/background-pattern.svg') center/cover;
+    opacity: 0.1;
   }
 
   .hero-content {
-    max-width: 800px;
+    max-width: 1000px;
     margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-badge {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.5em 1em;
+    border-radius: 20px;
+    font-size: 0.9em;
+    margin-bottom: 1em;
+    display: inline-block;
   }
 
   .hero h1 {
-    font-size: 3em;
+    font-size: 3.5em;
     margin: 0 0 0.5em;
+    line-height: 1.2;
   }
 
   .hero p {
-    font-size: 1.2em;
+    font-size: 1.3em;
     margin: 0 0 2em;
     opacity: 0.9;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .stats-row {
+    display: flex;
+    justify-content: center;
+    gap: 4em;
+    margin-bottom: 2em;
+  }
+
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .stat-number {
+    font-size: 2em;
+    font-weight: bold;
+    color: #fff;
+  }
+
+  .stat-label {
+    font-size: 0.9em;
+    opacity: 0.8;
+  }
+
+  .social-proof {
+    background: #f8fafc;
+    padding: 2em;
+    text-align: center;
+  }
+
+  .platform-logos {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2em;
+  }
+
+  .platform-logo {
+    height: 2.5em;
+    opacity: 0.7;
+  }
+
+  .platform-text {
+    color: #64748b;
+    font-size: 0.9em;
   }
 
   .cta-buttons {
@@ -128,15 +209,17 @@
   }
 
   .cta-button {
-    padding: 0.8em 1.5em;
-    border-radius: 25px;
-    font-weight: 500;
+    padding: 1em 2em;
+    border-radius: 30px;
+    font-weight: 600;
     text-decoration: none;
-    transition: transform 0.2s;
+    transition: all 0.3s ease;
+    font-size: 1.1em;
   }
 
   .cta-button:hover {
     transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
 
   .cta-button.primary {
@@ -147,79 +230,161 @@
   .cta-button.secondary {
     border: 2px solid white;
     color: white;
+    backdrop-filter: blur(5px);
+    background: rgba(255, 255, 255, 0.1);
   }
 
   section {
-    padding: 4em 2em;
+    padding: 6em 2em;
   }
 
   h2 {
     text-align: center;
-    color: #2d3748;
-    font-size: 2em;
-    margin: 0 0 2em;
+    color: #1e293b;
+    font-size: 2.5em;
+    margin: 0 0 1.5em;
+    font-weight: 700;
   }
 
-  .feature-grid,
-  .capability-grid,
-  .use-case-grid {
+  .testimonials {
+    background: #f8fafc;
+  }
+
+  .testimonial-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2em;
     max-width: 1200px;
     margin: 0 auto;
   }
 
-  .feature-card,
-  .capability-card,
-  .use-case-card {
+  .testimonial-card {
     background: white;
     padding: 2em;
     border-radius: 15px;
-    text-align: center;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    transition: transform 0.2s;
   }
 
-  .feature-card:hover,
-  .capability-card:hover,
-  .use-case-card:hover {
-    transform: translateY(-5px);
+  .testimonial-content p {
+    font-size: 1.1em;
+    color: #334155;
+    line-height: 1.6;
+    margin-bottom: 1em;
   }
 
-  .feature-icon,
-  .capability-icon,
-  .use-case-icon {
-    font-size: 2.5em;
+  .testimonial-author {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2em;
+  }
+
+  .testimonial-author strong {
+    color: #1e293b;
+  }
+
+  .testimonial-author span {
+    color: #64748b;
+    font-size: 0.9em;
+  }
+
+  .cta-section {
+    background: linear-gradient(135deg, #4f46e5 0%, #2563eb 100%);
+    color: white;
+    text-align: center;
+  }
+
+  .cta-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .cta-content h2 {
+    color: white;
     margin-bottom: 0.5em;
   }
 
-  h3 {
-    color: #2d3748;
-    margin: 0 0 0.5em;
+  .cta-content p {
+    font-size: 1.2em;
+    margin-bottom: 2em;
+    opacity: 0.9;
   }
 
-  p {
-    color: #4a5568;
+  .cta-buttons.final {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .no-credit-card {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9em;
+    margin-top: 1em;
+    margin-bottom: 0;
+  }
+
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2em;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .feature-card {
+    background: white;
+    padding: 2.5em;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    border: 1px solid #e2e8f0;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+  }
+
+  .feature-icon {
+    font-size: 3em;
+    margin-bottom: 0.5em;
+    display: inline-block;
+  }
+
+  .feature-card h3 {
+    color: #1e293b;
+    font-size: 1.5em;
+    margin: 0 0 0.5em;
+    font-weight: 600;
+  }
+
+  .feature-card p {
+    color: #64748b;
     margin: 0;
     line-height: 1.6;
-  }
-
-  .capabilities {
-    background: #f7fafc;
-  }
-
-  .use-cases {
-    background: #edf2f7;
+    font-size: 1.1em;
   }
 
   @media (max-width: 768px) {
+    .hero {
+      padding: 4em 1em;
+    }
+
     .hero h1 {
-      font-size: 2em;
+      font-size: 2.5em;
     }
 
     .hero p {
-      font-size: 1em;
+      font-size: 1.1em;
+    }
+
+    .stats-row {
+      flex-direction: column;
+      gap: 2em;
+    }
+
+    .platform-logos {
+      flex-direction: column;
+      gap: 1.5em;
     }
 
     .cta-buttons {
@@ -227,7 +392,11 @@
     }
 
     section {
-      padding: 2em 1em;
+      padding: 4em 1em;
+    }
+
+    h2 {
+      font-size: 2em;
     }
   }
 </style>

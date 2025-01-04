@@ -17,7 +17,7 @@
       <div class="testimonial">
         <div class="quote">"Our AI agents have revolutionized how we interact with customers, providing instant, intelligent responses 24/7."</div>
         <div class="author">
-          <img src="/testimonial-avatar.jpg" alt="Sarah Johnson" class="author-image" />
+          <img src="/testimonial-avatar.svg" alt="Sarah Johnson" class="author-image" />
           <div class="author-info">
             <div class="author-name">Sarah Johnson</div>
             <div class="author-title">Head of Sales, TechCorp</div>
